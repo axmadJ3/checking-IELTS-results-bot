@@ -1,6 +1,4 @@
-import sys
 import os
-import logging
 import asyncio
 
 from aiogram import Bot, Dispatcher
@@ -8,7 +6,9 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from handlers.welcome_commands import welcom_router
+from bot.logger_config import setup_logger
+from bot.handlers.welcome_handler import welcome_router
+from bot.handlers.task_handler import task_router
 
 load_dotenv()
 
@@ -19,9 +19,9 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTM
 
 async def main():
     dp = Dispatcher()
-    dp.include_router(welcom_router)
+    dp.include_routers(welcome_router, task_router)
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    setup_logger(__name__)
     asyncio.run(main())
