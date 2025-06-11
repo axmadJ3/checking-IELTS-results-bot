@@ -1,10 +1,18 @@
-from aiogram.types import Message
+from aiogram.types import Message, BotCommand
 from aiogram.filters import Command
 from aiogram import Router
 
 
 welcome_router = Router(name=__name__)
 
+
+async def set_commands(bot):
+    commands = [
+        BotCommand(command="start", description="Запуск бота"),
+        BotCommand(command="about", description="О боте"),
+        BotCommand(command="help", description="Показать помощь"),
+    ]
+    await bot.set_my_commands(commands)
 
 @welcome_router.message(Command('start'))
 async def command_start_handler(message: Message):
