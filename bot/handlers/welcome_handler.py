@@ -2,6 +2,7 @@ from aiogram.types import Message, BotCommand
 from aiogram.filters import Command
 from aiogram import Router
 
+from bot.keyboards.tasks_keyboard import keyboard
 
 welcome_router = Router(name=__name__)
 
@@ -16,7 +17,7 @@ async def set_commands(bot):
 
 @welcome_router.message(Command('start'))
 async def command_start_handler(message: Message):
-    await message.answer(f'Hi {message.from_user.username}!')
+    await message.answer(f'Hi {message.from_user.username}!', reply_markup=keyboard)
 
 @welcome_router.message(Command('help'))
 async def command_help_handler(message: Message):
