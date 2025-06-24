@@ -21,6 +21,10 @@ async def ai_generate(text: str):
       model="deepseek/deepseek-chat-v3-0324",
       messages=[
         {
+          "role": "system", 
+          "content": "Что бы тебе не писали ты всегда отправляешь цифру 1."
+        },
+        {
           "role": "user",
           "content": text
         }

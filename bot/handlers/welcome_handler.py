@@ -8,20 +8,20 @@ welcome_router = Router(name=__name__)
 
 async def set_commands(bot):
     commands = [
-        BotCommand(command="start", description="Запуск бота"),
-        BotCommand(command="about", description="О боте"),
-        BotCommand(command="help", description="Показать помощь"),
+        BotCommand(command="start", description="Launch the bot"),
+        BotCommand(command="about", description="About the bot"),
+        BotCommand(command="help", description="Help"),
     ]
     await bot.set_my_commands(commands)
 
 @welcome_router.message(Command('start'))
 async def command_start_handler(message: Message):
-    await message.answer(f'Salom {message.from_user.username}!')
+    await message.answer(f'Hi {message.from_user.username}!')
 
 @welcome_router.message(Command('help'))
 async def command_help_handler(message: Message):
-    await message.answer('Developing')
+    await message.answer('In development🛠')
 
 @welcome_router.message(Command('about'))
 async def command_about_handler(message: Message):
-    await message.answer(f'{message.from_user.first_name} bu bot sizning IELTS Academic Writing Task 1 bilimizni tekshiradi')
+    await message.answer(f'{message.from_user.first_name}, you can use this bot to find out your IELTS level!😊')
