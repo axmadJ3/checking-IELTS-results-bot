@@ -16,17 +16,13 @@ client = AsyncOpenAI(
     api_key=DEEPSEEK_API_KEY,
 )
 
-async def ai_generate(text: str):
+async def ai_generate(prompt: str):
     completion = await client.chat.completions.create(
       model="deepseek/deepseek-chat-v3-0324",
       messages=[
         {
-          "role": "system", 
-          "content": "Что бы тебе не писали ты всегда отправляешь цифру 1."
-        },
-        {
           "role": "user",
-          "content": text
+          "content": prompt
         }
       ]
     )
