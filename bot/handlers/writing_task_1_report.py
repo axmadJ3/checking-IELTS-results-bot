@@ -7,7 +7,7 @@ from aiogram.types import ReplyKeyboardRemove
 
 from bot.states.writing_task_states import WritingTask1State
 from bot.services.deepseek_chat import ai_generate
-from bot.services.build_prompt import build_prompt
+from bot.utils.build_prompt import build_prompt
 from bot.keyboards.answer_keyboard import keyboard
 
 
