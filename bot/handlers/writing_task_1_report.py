@@ -5,8 +5,9 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
-from bot.utils.states import WritingTask1State
-from bot.utils.deepseek_chat import ai_generate
+from bot.states.writing_task_states import WritingTask1State
+from bot.services.deepseek_chat import ai_generate
+from bot.services.build_prompt import build_prompt
 from bot.keyboards.answer_keyboard import keyboard
 
 
@@ -18,7 +19,7 @@ writing_task_1_router = Router(name=__name__)
 @writing_task_1_router.message(F.text == 'Writing Task 1 Report Checker')
 async def task1_checker(message: Message, state: FSMContext):
     await state.set_state(WritingTask1State.topic_state)
-    await message.answer('Send a topic')
+    await message.answer('Send a topic', reply_markup=ReplyKeyboardRemove())
 
 @writing_task_1_router.message(WritingTask1State.topic_state)
 async def get_topic(message: Message, state: FSMContext):
@@ -52,31 +53,18 @@ async def get_report(message: Message, state: FSMContext):
 async def generate_response(message: Message, state: FSMContext):
     await state.set_state(WritingTask1State.wait)
     
-    await message.answer("Analyzing your report... Please wait ⏳")
+    await message.answer("Analyzing your report... Please wait ⏳", reply_markup=ReplyKeyboardRemove())
     data = await state.get_data()
     topic = data.get("topic", "")
     report = data.get("report", "")
     topic_image = data.get("topic_image", "None")
     
     # Составляем промпт
-    prompt = f"""Проверь и оцени IELTS Writing Task 1.
-
-Тема: {topic}
-Изображение: {topic_image}
-Отчёт:
-{report}
-
-Дай краткий комментарии по четырём критериям IELTS на английском:
-- Task Achievement
-- Coherence and Cohesion
-- Lexical Resource
-- Grammatical Range and Accuracy
-
-Также укажи примерные баллы и советы по улучшению.
-"""
+    
 
     try:
-        response = await ai_generate(prompt)
+        full_prompt = build_prompt(topic, topic_image, report)
+        response = await ai_generate(full_prompt)
         await message.answer(response, parse_mode='Markdown', reply_markup=ReplyKeyboardRemove())
     except Exception as e:
         logger.error(f"Error while generating response: {e}")

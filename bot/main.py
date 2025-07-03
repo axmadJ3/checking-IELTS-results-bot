@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
 from bot.logger_config import setup_logger
-from bot.handlers.welcome_handler import welcome_router, set_commands
+from bot.handlers.start import start_router, set_commands
 from bot.handlers.writing_task_1_report import writing_task_1_router
 
 load_dotenv()
@@ -19,7 +19,7 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTM
 
 async def main():
     dp = Dispatcher()
-    dp.include_routers(welcome_router, writing_task_1_router)
+    dp.include_routers(start_router, writing_task_1_router)
     await set_commands(bot)
     await dp.start_polling(bot)
 
