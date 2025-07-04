@@ -1,25 +1,29 @@
-import os
 import asyncio
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from dotenv import load_dotenv
 
 from bot.logger_config import setup_logger
-from bot.handlers.start import start_router, set_commands
-from bot.handlers.writing_task_1_report import writing_task_1_router
+from bot.src.utils.config import settings
+from bot.src.handlers.tools import tools_router
+from bot.src.handlers.start import start_router, set_commands
+from bot.src.handlers.writing_task_1_report import writing_task_1_router
 
-load_dotenv()
 
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-
-bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(
+    token=settings.BOT_TOKEN, 
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+)
 
 
 async def main():
     dp = Dispatcher()
-    dp.include_routers(start_router, writing_task_1_router)
+    dp.include_routers(
+        start_router, 
+        writing_task_1_router,
+        tools_router
+    )
     await set_commands(bot)
     await dp.start_polling(bot)
 

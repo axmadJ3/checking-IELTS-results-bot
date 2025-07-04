@@ -5,10 +5,10 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
-from bot.states.writing_task_states import WritingTask1State
-from bot.services.deepseek_chat import ai_generate
-from bot.utils.build_prompt import build_prompt
-from bot.keyboards.answer_keyboard import keyboard
+from bot.src.states.writing_task_states import WritingTask1State
+from bot.src.services.deepseek_chat import ai_generate
+from bot.src.utils.util_texts import build_prompt
+from bot.src.keyboards.answer_keyboard import keyboard
 
 
 logger = logging.getLogger()
@@ -32,7 +32,7 @@ async def get_topic(message: Message, state: FSMContext):
 async def get_image(message: Message, state: FSMContext):
     if not message.photo:
         await message.answer("❗ Please send an image — this step is required.")
-        return  # не продолжаем дальше
+        return
 
     photo = message.photo[-1]
     image_info = photo.file_id
@@ -59,9 +59,6 @@ async def generate_response(message: Message, state: FSMContext):
     report = data.get("report", "")
     topic_image = data.get("topic_image", "None")
     
-    # Составляем промпт
-    
-
     try:
         full_prompt = build_prompt(topic, topic_image, report)
         response = await ai_generate(full_prompt)

@@ -1,19 +1,15 @@
-import os
 import logging
 
 from openai import AsyncOpenAI
-from dotenv import load_dotenv
 
+from bot.src.utils.config import settings
 
 logger = logging.getLogger()
-load_dotenv()
 
-
-DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY')
 
 client = AsyncOpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=DEEPSEEK_API_KEY,
+    api_key=settings.DEEPSEEK_API_KEY,
 )
 
 async def ai_generate(prompt: str):
